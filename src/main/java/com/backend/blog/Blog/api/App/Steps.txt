@@ -1,0 +1,6 @@
+step 1 -> entity
+step 1.5 -> dto
+step 2 -> repository
+step 3 -> service
+step 4 -> impl
+step 5 -> controler
