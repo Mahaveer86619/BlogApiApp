@@ -23,7 +23,7 @@ public class Post_controler {
     private Post_service post_service;
 
     // create
-    @PostMapping("/user/{userid}/category/{categoryid}/")
+    @PostMapping("/user/{userid}/category/{categoryid}/posts")
     public ResponseEntity<Post_dto> createPost(@RequestBody Post_dto post_dto,
             @PathVariable("userid") Integer userid,
             @PathVariable("categoryid") Integer categoryid) 
@@ -33,7 +33,7 @@ public class Post_controler {
     }
 
     // get all posts from userid
-    @GetMapping("/user/{userid}/")
+    @GetMapping("/user/{userid}/posts")
     public ResponseEntity<List<Post_dto>> getPostsByUserId (@PathVariable("userid") Integer userid) {
 
         List<Post_dto> posts = this.post_service.getPostsByUser(userid);
@@ -42,7 +42,7 @@ public class Post_controler {
     }
 
     // get all posts from categoryid
-    @GetMapping("/category/{categoryid}/")
+    @GetMapping("/category/{categoryid}/posts")
     public ResponseEntity<List<Post_dto>> getPostsByCategoryId (@PathVariable("categoryid") Integer categoryid) {
 
         List<Post_dto> posts = this.post_service.getPostsByUser(categoryid);
