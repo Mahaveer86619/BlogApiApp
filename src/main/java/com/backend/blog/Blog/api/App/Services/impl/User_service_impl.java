@@ -15,7 +15,7 @@ import com.backend.blog.Blog.api.App.Repositries.User_repo;
 import com.backend.blog.Blog.api.App.Services.User_service;
 
 @Service
-public class  User_service_impl implements User_service {
+public class User_service_impl implements User_service {
 
     @Autowired
     private User_repo user_repo;
