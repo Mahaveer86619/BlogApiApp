@@ -49,14 +49,16 @@ public class Category_service_impl implements Category_service {
 
     @Override
     public void deleteCategory(Integer categoryId) {
-        Categories categories = this.category_repo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category ", "CAtegory Id ", categoryId));
+        Categories categories = this.category_repo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException
+        ("Category ", "CAtegory Id ", categoryId));
 
         this.category_repo.delete(categories);
     }
 
     @Override
     public Category_dto getCategory(Integer categoryId) {
-        Categories categories = this.category_repo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category ", "CAtegory Id ", categoryId));
+        Categories categories = this.category_repo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException
+        ("Category ", "CAtegory Id ", categoryId));
         
         return this.modelMapper.map(categories, Category_dto.class);
     }
@@ -64,7 +66,9 @@ public class Category_service_impl implements Category_service {
     @Override
     public List<Category_dto> getAllCategory() {
         List<Categories> categories = this.category_repo.findAll();
-        List<Category_dto> category_dtos = categories.stream().map((cat) -> this.modelMapper.map(cat, Category_dto.class)).collect(Collectors.toList());
+        List<Category_dto> category_dtos = categories.stream()
+        .map((cat) -> this.modelMapper.map(cat, Category_dto.class))
+        .collect(Collectors.toList());
         
         return category_dtos;
     }

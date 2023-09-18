@@ -57,27 +57,48 @@ public class Posts_service_impl implements Post_service{
     }
 
     @Override
-    public Posts updatePosts(Post_dto post_dto, Integer postid) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updatePosts'");
+    public Post_dto updatePosts(Post_dto post_dto, Integer postid) {
+        
+        Posts mpost = this.Post_repo.findById(postid).orElseThrow(() -> new ResourceNotFoundException
+        ("Post", "postId", postid));
+
+        mpost.setContent(post_dto.getContent());
+        mpost.setImageName(post_dto.getImageName());
+        mpost.setTitle(post_dto.getTitle());
+
+        Posts updatedPost = this.Post_repo.save(mpost);
+
+        return this.mapper.map(updatedPost, Post_dto.class);
     }
 
     @Override
-    public void deletePost(Integer postid) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deletePost'");
+    public void deletePost(Integer postId) {
+        Posts post = this.Post_repo.findById(postId).orElseThrow(() -> new ResourceNotFoundException
+        ("Post", "postId", postId));
+
+        this.Post_repo.delete(post);   
+
     }
 
     @Override
-    public List<Posts> getAllPosts() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllPosts'");
+    public List<Post_dto> getAllPosts() {
+        
+        List<Posts> posts = this.Post_repo.findAll();
+        List<Post_dto> post_dtos = posts.stream()
+        .map(post -> this.mapper.map(post, Post_dto.class))
+        .collect(Collectors.toList());
+
+        return post_dtos;
+
     }
 
     @Override
-    public Posts getPostById(Integer postid) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPostById'");
+    public Post_dto getPostById(Integer postid) {
+        
+        Posts post = this.Post_repo.findById(postid).orElseThrow(() -> new ResourceNotFoundException
+        ("post", "postId", postid));
+
+        return this.mapper.map(post, Post_dto.class);
     }
 
     @Override
@@ -88,7 +109,9 @@ public class Posts_service_impl implements Post_service{
 
         List<Posts> posts = this.Post_repo.findByCategory(cat);
 
-        List<Post_dto> post_dtos = posts.stream().map((post) -> this.mapper.map(posts, Post_dto.class)).collect(Collectors.toList());
+        List<Post_dto> post_dtos = posts.stream()
+        .map(post -> this.mapper.map(post, Post_dto.class))// Map each Post entity to Post_dto
+        .collect(Collectors.toList());
 
         return post_dtos;
     }
@@ -101,13 +124,15 @@ public class Posts_service_impl implements Post_service{
 
         List<Posts> posts = this.Post_repo.findByUser(user);
 
-        List<Post_dto> post_dtos = posts.stream().map((post) -> this.mapper.map(posts, Post_dto.class)).collect(Collectors.toList());
+        List<Post_dto> post_dtos = posts.stream()
+        .map((post) -> this.mapper.map(post, Post_dto.class))
+        .collect(Collectors.toList());
 
         return post_dtos;
     }
 
     @Override
-    public Posts getPostsBySearch(String keyword) {
+    public Post_dto getPostsBySearch(String keyword) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getPostsBySearch'");
     }

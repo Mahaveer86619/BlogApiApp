@@ -2,7 +2,6 @@ package com.backend.blog.Blog.api.App.Services;
 
 import java.util.List;
 
-import com.backend.blog.Blog.api.App.Entities.Posts;
 import com.backend.blog.Blog.api.App.Payloads.Post_dto;
 
 public interface Post_service {
@@ -11,16 +10,16 @@ public interface Post_service {
     Post_dto createPost(Post_dto post_dto, Integer userid, Integer categoryid);
 
     //update
-    Posts updatePosts(Post_dto post_dto, Integer postid);
+    Post_dto updatePosts(Post_dto post_dto, Integer postid);
 
     //delete
     void deletePost(Integer postid);
 
     //All posts
-    List<Posts> getAllPosts ();
+    List<Post_dto> getAllPosts ();
 
     //get single post
-    Posts getPostById (Integer postid);
+    Post_dto getPostById (Integer postid);
 
     // get post by caegory
     List<Post_dto> getPostsByCategory (Integer categoryid);
@@ -29,6 +28,6 @@ public interface Post_service {
     List<Post_dto> getPostsByUser (Integer userid);
 
     // get post by search
-    Posts getPostsBySearch (String keyword);
+    Post_dto getPostsBySearch (String keyword);
 
 }

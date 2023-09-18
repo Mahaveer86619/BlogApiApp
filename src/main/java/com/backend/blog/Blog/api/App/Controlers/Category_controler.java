@@ -44,16 +44,17 @@ public class Category_controler {
     @DeleteMapping("/{categoryid}")
     public ResponseEntity<Api_response> delete_Category(@PathVariable("categoryid") Integer categoryid) {
         this.category_service.deleteCategory(categoryid);
-        return new ResponseEntity<Api_response>(new Api_response("Category deleted succesfully", true), HttpStatus.OK);
+        return new ResponseEntity<Api_response>
+        (new Api_response("Category deleted succesfully", true), HttpStatus.OK);
     }
     
     @GetMapping(("/"))
-    public ResponseEntity<List<Category_dto>> get_All_Users() {
+    public ResponseEntity<List<Category_dto>> get_All_Category() {
         return ResponseEntity.ok(this.category_service.getAllCategory());
     }
     
     @GetMapping(("/{categoryid}"))
-    public ResponseEntity<Category_dto> get_Single_Users(@PathVariable("categoryid") Integer categoryid) {
+    public ResponseEntity<Category_dto> get_Single_Category(@PathVariable("categoryid") Integer categoryid) {
         Category_dto category_dto = this.category_service.getCategory(categoryid);
         return new ResponseEntity<Category_dto>(category_dto, HttpStatus.OK);
     }

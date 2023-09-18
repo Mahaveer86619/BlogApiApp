@@ -13,6 +13,7 @@ import lombok.Setter;
 @Setter
 public class Post_dto {
 
+    private Integer postId;
     @NotBlank
     @Size(min = 4, message = "Min size should be more than 4 characters.")
     private String title;
