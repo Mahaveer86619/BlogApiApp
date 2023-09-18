@@ -1,7 +1,5 @@
 package com.backend.blog.Blog.api.App.Controlers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.backend.blog.Blog.api.App.Entities.Posts;
+import com.backend.blog.Blog.api.App.Config.App_constants;
 import com.backend.blog.Blog.api.App.Payloads.Api_response;
 import com.backend.blog.Blog.api.App.Payloads.Post_dto;
+import com.backend.blog.Blog.api.App.Payloads.Post_response;
 import com.backend.blog.Blog.api.App.Services.Post_service;
-
 
 @RestController
 @RequestMapping("/api")
@@ -31,40 +30,57 @@ public class Post_controler {
     @PostMapping("/user/{userid}/category/{categoryid}/posts")
     public ResponseEntity<Post_dto> createPost(@RequestBody Post_dto post_dto,
             @PathVariable("userid") Integer userid,
-            @PathVariable("categoryid") Integer categoryid) 
-    {
+            @PathVariable("categoryid") Integer categoryid) {
         Post_dto createPost = this.post_service.createPost(post_dto, userid, categoryid);
         return new ResponseEntity<Post_dto>(createPost, HttpStatus.CREATED);
     }
 
     // get all posts from userid
     @GetMapping("/user/{userid}/posts")
-    public ResponseEntity<List<Post_dto>> getPostsByUserId (@PathVariable("userid") Integer userid) {
+    public ResponseEntity<Post_response> getPostsByUserId(
+            @PathVariable("userid") Integer userid,
+            @RequestParam(value = "pageNumber", defaultValue = App_constants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = App_constants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = App_constants.SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = App_constants.SORT_DIR, required = false) String sortDir) {
 
-        List<Post_dto> posts = this.post_service.getPostsByUser(userid);
+        Post_response postrResponse = this.post_service.getPostsByUser(userid, pageNumber, pageSize, sortBy, sortDir);
 
-        return new ResponseEntity<List<Post_dto>>(posts, HttpStatus.OK);
+        return new ResponseEntity<Post_response>(postrResponse, HttpStatus.OK);
     }
 
     // get all posts from categoryid
     @GetMapping("/category/{categoryid}/posts")
-    public ResponseEntity<List<Post_dto>> getPostsByCategoryId (@PathVariable("categoryid") Integer categoryid) {
+    public ResponseEntity<Post_response> getPostsByCategoryId(
+            @PathVariable("categoryid") Integer categoryid,
+            @RequestParam(value = "pageNumber", defaultValue = App_constants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = App_constants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = App_constants.SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = App_constants.SORT_DIR, required = false) String sortDir) {
 
-        List<Post_dto> posts = this.post_service.getPostsByUser(categoryid);
+        Post_response postrResponse = this.post_service.getPostsByCategory(categoryid, pageNumber, pageSize, sortBy,
+                sortDir);
 
-        return new ResponseEntity<List<Post_dto>>(posts, HttpStatus.OK);
+        return new ResponseEntity<Post_response>(postrResponse, HttpStatus.OK);
     }
 
-    //get all posts
+    // get all posts and sort and implement pagination page size starts form 0
+    // http://localhost:6969/api/posts?pageNumber=0&pageSize=2&sortDir=asc or desc
+    // (example)
+    //
     @GetMapping("/posts")
-    public ResponseEntity<List<Post_dto>> getAllPosts () {
-        
-        List<Post_dto> posts = this.post_service.getAllPosts();
+    public ResponseEntity<Post_response> getAllPosts(
+            @RequestParam(value = "pageNumber", defaultValue = App_constants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = App_constants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = App_constants.SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = App_constants.SORT_DIR, required = false) String sortDir) {
 
-        return new ResponseEntity<List<Post_dto>>(posts, HttpStatus.OK);
+        Post_response postrResponse = this.post_service.getAllPosts(pageNumber, pageSize, sortBy, sortDir);
+
+        return new ResponseEntity<Post_response>(postrResponse, HttpStatus.OK);
     }
 
-    //get post by Id
+    // get post by Id
     @GetMapping("/posts/{postId}")
     public ResponseEntity<Post_dto> getPostById(@PathVariable Integer postId) {
 
@@ -73,24 +89,36 @@ public class Post_controler {
         return new ResponseEntity<Post_dto>(post_dto, HttpStatus.OK);
     }
 
-    //delete post
+    // delete post
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<Api_response> deletePost (@PathVariable Integer postId) {
+    public ResponseEntity<Api_response> deletePost(@PathVariable Integer postId) {
         this.post_service.deletePost(postId);
 
-        return new ResponseEntity<Api_response>
-        (new Api_response("Post deleted succesfully", true), HttpStatus.OK);
+        return new ResponseEntity<Api_response>(new Api_response("Post deleted succesfully", true), HttpStatus.OK);
 
     }
 
     // update post
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<Post_dto> updatepost (@RequestBody Post_dto post_dto, @PathVariable Integer postId){
+    public ResponseEntity<Post_dto> updatepost(@RequestBody Post_dto post_dto, @PathVariable Integer postId) {
 
         Post_dto post = this.post_service.updatePosts(post_dto, postId);
 
         return new ResponseEntity<Post_dto>(post, HttpStatus.OK);
 
+    }
+
+    // search a keyword for any relevant title or content
+    @GetMapping("/posts/search")
+    public ResponseEntity<Post_response> searchPosts(
+            @RequestParam("keyword") String keyword,
+            @RequestParam(value = "pageNumber", defaultValue = App_constants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = App_constants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = App_constants.SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = App_constants.SORT_DIR, required = false) String sortDir) {
+        Post_response postResponse = this.post_service.getPostsBySearch(keyword, pageNumber, pageSize, sortBy, sortDir);
+
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
 }
