@@ -34,7 +34,7 @@ public class Contact_us_controler {
 
     // get find one
     @GetMapping(("/{userid}"))
-    public ResponseEntity<Contact_us_dto> get_Single_Users(@PathVariable("id") Integer id) {
+    public ResponseEntity<Contact_us_dto> get_Single_Users(@PathVariable Integer id) {
 
         return ResponseEntity.ok(this.contact_us_service.get_user_by_id(id));
     }
@@ -48,7 +48,7 @@ public class Contact_us_controler {
 
     // delete delete one
     @DeleteMapping("/{userid}")
-    public ResponseEntity<Api_response> delete_User(@PathVariable("id") Integer id) {
+    public ResponseEntity<Api_response> delete_User(@PathVariable Integer id) {
         this.contact_us_service.delete(id);
         return new ResponseEntity<Api_response>(new Api_response("User deleted succesfully", true), HttpStatus.OK);
     }

@@ -32,7 +32,7 @@ public class Posts {
     private String content;
 
     @Column(name = "Image", length = 300)
-    private Integer imageName;
+    private String imageName;
 
     @Column(name = "Date Added", length = 10)
     private Date dateAdded;

@@ -20,7 +20,8 @@ public class Post_dto {
     @NotBlank
     @Size(min = 10, message = "Min size should be more than 10 characters.")
     private String content;
-    private Integer imageName;
+    //changed int to string 
+    private String imageName;
     private Date dateAdded;
     private Category_dto category;
     private User_dto user;

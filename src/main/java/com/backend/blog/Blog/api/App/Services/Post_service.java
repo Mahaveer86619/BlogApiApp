@@ -1,7 +1,5 @@
 package com.backend.blog.Blog.api.App.Services;
 
-import java.util.List;
-
 import com.backend.blog.Blog.api.App.Payloads.Post_dto;
 import com.backend.blog.Blog.api.App.Payloads.Post_response;
 
